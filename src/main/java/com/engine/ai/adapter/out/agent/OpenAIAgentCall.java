@@ -23,13 +23,19 @@ public class OpenAIAgentCall implements AgentCall  {
 
     private final ChatClient client;
 
-    private final ChatMemoryRepository redisMemoryRepository;
+    @Autowired
+    @Qualifier("redisMemoryRepository")
+    private ChatMemoryRepository redisMemoryRepository;
+
+    @Autowired
+    @Qualifier("jdbcChatMemoryRepository")
+    private ChatMemoryRepository jdbcMemoryRepository;
 
     @Override
     public AssistantAnswer callAgent(Assistant assistant) {
 
         final MessageWindowChatMemory memory = MessageWindowChatMemory.builder()
-                .chatMemoryRepository(redisMemoryRepository)
+                .chatMemoryRepository(assistant.isRedisMemoryStrategy() ? redisMemoryRepository : jdbcMemoryRepository)
                 .build();
 
         final MessageChatMemoryAdvisor memoryAdvisor = MessageChatMemoryAdvisor.builder(memory)

@@ -1,1 +1,1 @@
-ALTER TABLE agents ADD COLUMN parent_id UUID REFERENCES agents(id);
+ALTER TABLE agents ADD COLUMN IF NOT EXISTS parent_id UUID REFERENCES agents(id);

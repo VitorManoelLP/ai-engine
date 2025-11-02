@@ -1,0 +1,6 @@
+CREATE TABLE IF NOT EXISTS session (
+    id UUID PRIMARY KEY,
+    conversation_id VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    expires_at TIMESTAMP NOT NULL
+);
