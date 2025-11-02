@@ -4,10 +4,7 @@ import com.engine.ai.domain.enums.Capability;
 import com.engine.ai.domain.valueobject.AgentName;
 import com.engine.ai.domain.valueobject.Prompt;
 import com.engine.ai.domain.valueobject.Version;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.ZonedDateTime;
 import java.util.HashSet;
@@ -18,6 +15,8 @@ import java.util.UUID;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString(of = "id")
+@EqualsAndHashCode(of = "id")
 public class Agent {
 
     private UUID id;
