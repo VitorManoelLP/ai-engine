@@ -8,7 +8,7 @@ import com.engine.ai.app.port.out.JsonPartialApplier;
 import com.engine.ai.app.usecase.CapabilityUseCase;
 import com.engine.ai.domain.entity.Agent;
 import com.engine.ai.domain.enums.Capability;
-import com.engine.ai.domain.exception.AgentNotFoundException;
+import com.engine.ai.domain.exceptions.AgentNotFoundException;
 import com.engine.ai.domain.valueobject.AgentName;
 import com.engine.ai.domain.valueobject.Prompt;
 import lombok.RequiredArgsConstructor;
@@ -81,7 +81,7 @@ class AgentService implements AgentManagementUseCase, CapabilityUseCase {
     public Agent updateAgentById(UUID id, List<Partial> partials) {
 
         final Agent agent = agentRepository.findById(id)
-                .orElseThrow(() -> new AgentNotFoundException(id));
+                .orElseThrow(() -> new AgentNotFoundException("Agent with id " + id + " not found"));
 
         final Agent agentUpdated = jsonPartialApplier.applyJsonPatch(agent, partials).newVersion();
 
