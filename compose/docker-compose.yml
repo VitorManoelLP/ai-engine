@@ -1,5 +1,4 @@
 version: '3.8'
-
 services:
     postgres-master:
         image: postgres:17
@@ -10,7 +9,7 @@ services:
             POSTGRES_DB: mydb
             POSTGRES_HOST_AUTH_METHOD: "scram-sha-256
 
-                host replication all 0.0.0.0/0 md5"
+                \    host replication all 0.0.0.0/0 md5"
             POSTGRES_INITDB_ARGS: "--auth-host=scram-sha-256"
         ports:
             - "5532:5432"
@@ -64,10 +63,39 @@ services:
         networks:
             - postgres-network
 
+    redis:
+        image: redis:7-alpine
+        container_name: redis
+        ports:
+            - "6379:6379"
+        volumes:
+            - redis-data:/data
+        command: redis-server --appendonly yes --requirepass redis123
+        networks:
+            - postgres-network
+        healthcheck:
+            test: [ "CMD", "redis-cli", "--raw", "incr", "ping" ]
+            interval: 10s
+            timeout: 5s
+            retries: 5
+
+    redis-commander:
+        image: rediscommander/redis-commander:latest
+        container_name: redis-commander
+        environment:
+            REDIS_HOSTS: local:redis:6379:0:redis123
+        ports:
+            - "8081:8081"
+        depends_on:
+            - redis
+        networks:
+            - postgres-network
+
 volumes:
     postgres-master-data:
     postgres-slave1-data:
     postgres-slave2-data:
+    redis-data:
 
 
 networks:
